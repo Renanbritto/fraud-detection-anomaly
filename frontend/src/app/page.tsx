@@ -46,6 +46,10 @@ import {
   Search,
   Clock,
   Users,
+  Menu,
+  X,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -442,11 +446,65 @@ def optimize_threshold(
 `;
 
 // ============================================================================
+// NAVIGATION CONFIGURATION
+// ============================================================================
+
+const NAV_ITEMS = [
+  {
+    id: "overview" as const,
+    label: "1. Visão Geral & Features",
+    shortLabel: "1. Visão Geral",
+    icon: Layers,
+    activeBg: "bg-rose-500/15 border-rose-500/40 text-rose-300",
+    iconColor: "text-rose-400",
+    description: "Desbalanceamento & Features",
+  },
+  {
+    id: "models" as const,
+    label: "2. Isolation Forest & Autoencoder",
+    shortLabel: "2. Modelos & Neural",
+    icon: Cpu,
+    activeBg: "bg-amber-500/15 border-amber-500/40 text-amber-300",
+    iconColor: "text-amber-400",
+    description: "Dual Model & Erro MSE",
+  },
+  {
+    id: "pr_curve" as const,
+    label: "3. Precision-Recall & Threshold",
+    shortLabel: "3. PR & Cutoff",
+    icon: Target,
+    activeBg: "bg-emerald-500/15 border-emerald-500/40 text-emerald-300",
+    iconColor: "text-emerald-400",
+    description: "Otimização Custo Assimétrico",
+  },
+  {
+    id: "simulator" as const,
+    label: "4. Simulador de Impacto (R$)",
+    shortLabel: "4. Simulador ROI",
+    icon: Sliders,
+    activeBg: "bg-cyan-500/15 border-cyan-500/40 text-cyan-300",
+    iconColor: "text-cyan-400",
+    description: "Economia Real & Falsos Positivos",
+  },
+  {
+    id: "python_code" as const,
+    label: "5. Pipeline Python & Algoritmo",
+    shortLabel: "5. Pipeline Python",
+    icon: Code2,
+    activeBg: "bg-purple-500/15 border-purple-500/40 text-purple-300",
+    iconColor: "text-purple-400",
+    description: "PyTorch & Isolation Forest",
+  },
+];
+
+// ============================================================================
 // MAIN COMPONENT
 // ============================================================================
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<"overview" | "models" | "pr_curve" | "simulator" | "python_code">("overview");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const tabScrollRef = useRef<HTMLDivElement>(null);
 
   // Threshold Slider
@@ -523,163 +581,370 @@ export default function DashboardPage() {
   };
 
   return (
-    <main className="min-h-screen p-4 sm:p-8 lg:p-12 max-w-7xl mx-auto flex flex-col gap-8">
-      <div className="liquid-glass rounded-3xl p-4 sm:p-8 flex flex-col gap-8 border border-white/10 shadow-2xl relative overflow-hidden">
-      {/* Fluid Mesh Glows */}
-      <div className="pointer-events-none absolute -top-24 right-0 w-96 h-96 bg-rose-600/10 rounded-full blur-[120px]" />
-      <div className="pointer-events-none absolute bottom-0 left-0 w-80 h-80 bg-amber-500/10 rounded-full blur-[100px]" />
+    <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col lg:flex-row relative selection:bg-rose-500/30 overflow-x-hidden">
+      {/* ─── DESKTOP LEFT SIDEBAR (RETRACTABLE) ────────────────── */}
+      <aside
+        className={cn(
+          "hidden lg:flex shrink-0 sticky top-0 h-screen flex-col justify-between border-r border-white/10 bg-[#0b0f1a]/95 backdrop-blur-2xl z-30 overflow-y-auto no-scrollbar shadow-2xl transition-all duration-300 ease-in-out",
+          sidebarCollapsed ? "w-20 p-3" : "w-72 xl:w-80 p-5"
+        )}
+      >
+        <div className="flex flex-col gap-5">
+          {/* Brand Header */}
+          <div className={cn("flex items-center pb-4 border-b border-white/10 transition-all", sidebarCollapsed ? "justify-center flex-col gap-3" : "justify-between")}>
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-rose-500/20 to-amber-500/10 border border-rose-500/30 flex items-center justify-center shadow-lg shadow-rose-500/10 shrink-0">
+                <ShieldAlert className="h-6 w-6 text-rose-400" />
+              </div>
+              {!sidebarCollapsed && (
+                <div className="flex flex-col min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="font-extrabold text-base tracking-wider text-white">SENTINEL</span>
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">AI</span>
+                  </div>
+                  <span className="text-[11px] text-muted-foreground font-medium truncate">Anomaly & Fraud Engine</span>
+                </div>
+              )}
+            </div>
 
-      {/* ─── HEADER ─────────────────────────────────────────────── */}
-      <div className="relative z-10 flex flex-col gap-3">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center gap-2.5 text-xs text-muted-foreground">
-            <ShieldAlert className="h-4 w-4 text-rose-400" />
-            <span className="font-semibold uppercase tracking-widest">
-              Anomaly Detection & Deep Learning Anti-Fraude
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <a
-              href="https://github.com/Renanbritto/fraud-detection-anomaly"
-              target="_blank"
-              rel="noreferrer"
-              className="px-3 py-1 rounded-full text-xs font-semibold bg-white/[0.06] hover:bg-white/10 text-slate-200 hover:text-white border border-white/10 flex items-center gap-1.5 transition-colors shadow-sm"
+            {/* Toggle Button */}
+            <button
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className={cn(
+                "p-2 rounded-xl text-slate-400 hover:text-white bg-white/[0.02] hover:bg-white/[0.08] border border-white/5 transition-all cursor-pointer",
+                sidebarCollapsed && "w-10 h-10 flex items-center justify-center"
+              )}
+              title={sidebarCollapsed ? "Expandir menu" : "Recolher menu"}
+              aria-label={sidebarCollapsed ? "Expandir menu" : "Recolher menu"}
             >
-              <GithubIcon className="h-3.5 w-3.5" />
-              Repositório GitHub
-            </a>
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-300 border border-rose-500/30 flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5" />
-              488K Transações Analisadas
+              {sidebarCollapsed ? (
+                <PanelLeftOpen className="h-4 w-4 text-rose-400" />
+              ) : (
+                <PanelLeftClose className="h-4 w-4" />
+              )}
+            </button>
+          </div>
+
+          {/* Navigation Menu */}
+          <div className="flex flex-col gap-1.5">
+            {!sidebarCollapsed && (
+              <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 px-2 mb-1">
+                Módulos do Sistema
+              </span>
+            )}
+            {NAV_ITEMS.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  title={sidebarCollapsed ? `${item.label} — ${item.description}` : undefined}
+                  className={cn(
+                    "group w-full flex items-center transition-all border cursor-pointer",
+                    sidebarCollapsed
+                      ? "justify-center p-2.5 rounded-2xl"
+                      : "justify-between p-3 rounded-2xl text-left",
+                    isActive
+                      ? item.activeBg + " shadow-lg shadow-rose-500/5"
+                      : "bg-white/[0.01] hover:bg-white/[0.04] text-slate-400 hover:text-slate-100 border-transparent hover:border-white/5"
+                  )}
+                >
+                  <div className={cn("flex items-center min-w-0", sidebarCollapsed ? "justify-center" : "gap-3")}>
+                    <div
+                      className={cn(
+                        "p-2 rounded-xl border transition-colors shrink-0",
+                        isActive
+                          ? "bg-white/10 border-white/20 text-white"
+                          : "bg-white/[0.02] border-white/5 text-slate-400 group-hover:text-slate-200"
+                      )}
+                    >
+                      <Icon className={cn("h-4 w-4", isActive ? item.iconColor : "")} />
+                    </div>
+                    {!sidebarCollapsed && (
+                      <div className="flex flex-col min-w-0">
+                        <span className={cn("text-xs font-bold truncate", isActive ? "text-white" : "text-slate-300")}>
+                          {item.label}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground truncate">{item.description}</span>
+                      </div>
+                    )}
+                  </div>
+                  {!sidebarCollapsed && (
+                    <ChevronRight
+                      className={cn(
+                        "h-4 w-4 shrink-0 transition-transform",
+                        isActive ? "text-white translate-x-0.5 opacity-100" : "text-slate-600 opacity-0 group-hover:opacity-100"
+                      )}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Sidebar Footer */}
+        <div className="flex flex-col gap-3 pt-4 border-t border-white/10">
+          {!sidebarCollapsed && (
+            <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/5 flex flex-col gap-1 text-[11px]">
+              <div className="flex justify-between text-muted-foreground">
+                <span>Dataset Total:</span>
+                <span className="font-mono font-semibold text-slate-200">488.000 tx</span>
+              </div>
+              <div className="flex justify-between text-muted-foreground">
+                <span>Taxa Base Fraude:</span>
+                <span className="font-mono font-semibold text-rose-300">0.49%</span>
+              </div>
+              <div className="flex justify-between text-muted-foreground">
+                <span>Recall Ótimo:</span>
+                <span className="font-mono font-semibold text-amber-300">91.8%</span>
+              </div>
+            </div>
+          )}
+
+          <a
+            href="https://github.com/Renanbritto/fraud-detection-anomaly"
+            target="_blank"
+            rel="noreferrer"
+            title="Repositório GitHub"
+            className={cn(
+              "flex items-center rounded-xl text-xs font-semibold bg-white/[0.06] hover:bg-white/10 text-slate-200 hover:text-white border border-white/10 transition-colors shadow-sm cursor-pointer",
+              sidebarCollapsed ? "justify-center p-2.5" : "justify-center gap-2 p-2.5"
+            )}
+          >
+            <GithubIcon className="h-4 w-4 shrink-0" />
+            {!sidebarCollapsed && (
+              <>
+                <span>Repositório GitHub</span>
+                <ArrowUpRight className="h-3.5 w-3.5 text-slate-400" />
+              </>
+            )}
+          </a>
+        </div>
+      </aside>
+
+      {/* ─── MOBILE / TABLET TOP BAR ───────────────────────────── */}
+      <div className="lg:hidden sticky top-0 z-40 px-4 py-3 bg-[#090d16]/90 backdrop-blur-xl border-b border-white/10 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-rose-500/20 to-amber-500/10 border border-rose-500/30 flex items-center justify-center shadow-md shrink-0">
+            <ShieldAlert className="h-4 w-4 text-rose-400" />
+          </div>
+          <div>
+            <div className="flex items-center gap-1.5">
+              <span className="font-extrabold text-sm tracking-wider text-white">SENTINEL</span>
+              <span className="px-1 py-0.2 rounded text-[8px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">AI</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.05] hover:bg-white/10 border border-white/10 text-white transition-colors cursor-pointer"
+            aria-label="Abrir menu"
+          >
+            <span className="text-xs font-semibold text-slate-300">
+              {NAV_ITEMS.find((n) => n.id === activeTab)?.shortLabel}
             </span>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-3 flex-wrap">
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-              Detecção de Fraude & Anomaly Detection
-            </h2>
-            <span className="liquid-glass-pill px-3 py-1 text-xs font-bold text-rose-300">
-              Recall 91.8% • Precision 56.2% • F1 69.7%
-            </span>
-          </div>
-          <p className="text-xs sm:text-sm text-muted-foreground max-w-4xl leading-relaxed">
-            Sistema preditivo de detecção de transações fraudulentas com ensemble de{" "}
-            <strong>Isolation Forest</strong> (não-supervisionado) e <strong>Autoencoder neural</strong> (PyTorch).
-            Inclui <strong>SMOTE</strong> para tratamento de desbalanceamento extremo (0.49% de fraudes),
-            otimização de threshold por custo assimétrico e simulador financeiro de impacto.
-          </p>
+            <Menu className="h-4 w-4 text-slate-300" />
+          </button>
         </div>
       </div>
 
-      {/* ─── TABS ────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-white/10 scrollbar-none" ref={tabScrollRef}>
-        <button
-          onClick={() => setActiveTab("overview")}
-          className={cn(
-            "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer",
-            activeTab === "overview"
-              ? "bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-lg shadow-rose-500/10"
-              : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-          )}
-        >
-          <Layers className="h-4 w-4 text-rose-400" />
-          1. Visão Geral & Features
-        </button>
-
-        <button
-          onClick={() => setActiveTab("models")}
-          className={cn(
-            "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer",
-            activeTab === "models"
-              ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-lg shadow-amber-500/10"
-              : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-          )}
-        >
-          <Cpu className="h-4 w-4 text-amber-400" />
-          2. Isolation Forest & Autoencoder
-        </button>
-
-        <button
-          onClick={() => setActiveTab("pr_curve")}
-          className={cn(
-            "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer",
-            activeTab === "pr_curve"
-              ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-lg shadow-emerald-500/10"
-              : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-          )}
-        >
-          <Target className="h-4 w-4 text-emerald-400" />
-          3. Precision-Recall & Threshold
-        </button>
-
-        <button
-          onClick={() => setActiveTab("simulator")}
-          className={cn(
-            "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer",
-            activeTab === "simulator"
-              ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-lg shadow-cyan-500/10"
-              : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-          )}
-        >
-          <Sliders className="h-4 w-4 text-cyan-400" />
-          4. Simulador de Impacto (R$)
-        </button>
-
-        <button
-          onClick={() => setActiveTab("python_code")}
-          className={cn(
-            "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer",
-            activeTab === "python_code"
-              ? "bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-lg shadow-purple-500/10"
-              : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-          )}
-        >
-          <Code2 className="h-4 w-4 text-purple-400" />
-          5. Pipeline Python & Algoritmo
-        </button>
-        
+      {/* ─── MOBILE QUICK CHIPS (NO SCROLLBAR) ─────────────────── */}
+      <div className="lg:hidden flex items-center gap-2 overflow-x-auto px-4 py-2 border-b border-white/5 bg-[#0b0f1a]/60 no-scrollbar">
+        {NAV_ITEMS.map((item) => {
+          const isActive = activeTab === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={cn(
+                "px-3 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all border shrink-0 cursor-pointer",
+                isActive
+                  ? item.activeBg + " shadow-sm"
+                  : "bg-white/[0.02] text-slate-400 hover:text-white border-white/5 hover:bg-white/5"
+              )}
+            >
+              {item.shortLabel}
+            </button>
+          );
+        })}
       </div>
 
-      {/* ─── KPI CARDS ──────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col gap-1.5">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>Precision-Recall AUC</span>
-            <Target className="h-4 w-4 text-rose-400" />
+      {/* ─── MOBILE DRAWER OVERLAY ──────────────────────────────── */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden flex">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+
+          {/* Drawer content */}
+          <div className="relative w-4/5 max-w-sm bg-[#0b0f1a] border-r border-white/10 h-full flex flex-col justify-between p-5 z-10 overflow-y-auto no-scrollbar shadow-2xl">
+            <div className="flex flex-col gap-5">
+              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-rose-500/20 to-amber-500/10 border border-rose-500/30 flex items-center justify-center">
+                    <ShieldAlert className="h-5 w-5 text-rose-400" />
+                  </div>
+                  <div>
+                    <span className="font-extrabold text-sm text-white">SENTINEL</span>
+                    <span className="block text-[10px] text-muted-foreground">Módulos de Análise</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 cursor-pointer"
+                  aria-label="Fechar menu"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                {NAV_ITEMS.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id);
+                        setMobileMenuOpen(false);
+                      }}
+                      className={cn(
+                        "w-full flex items-center justify-between p-3 rounded-2xl text-left transition-all border cursor-pointer",
+                        isActive
+                          ? item.activeBg + " shadow-md"
+                          : "bg-white/[0.01] hover:bg-white/[0.04] text-slate-400 hover:text-slate-100 border-transparent"
+                      )}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className={cn("p-2 rounded-xl border shrink-0", isActive ? "bg-white/10 border-white/20" : "bg-white/[0.02] border-white/5")}>
+                          <Icon className={cn("h-4 w-4", isActive ? item.iconColor : "")} />
+                        </div>
+                        <div className="min-w-0">
+                          <span className={cn("text-xs font-bold block truncate", isActive ? "text-white" : "text-slate-300")}>
+                            {item.label}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground truncate block">{item.description}</span>
+                        </div>
+                      </div>
+                      <ChevronRight className={cn("h-4 w-4 shrink-0", isActive ? "text-white" : "text-slate-600")} />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 pt-4 border-t border-white/10 mt-6">
+              <a
+                href="https://github.com/Renanbritto/fraud-detection-anomaly"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-center gap-2 p-2.5 rounded-xl text-xs font-semibold bg-white/[0.06] hover:bg-white/10 text-white border border-white/10 transition-colors"
+              >
+                <GithubIcon className="h-4 w-4" />
+                <span>Repositório GitHub</span>
+              </a>
+            </div>
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-rose-300 font-mono">0.847</div>
-          <p className="text-[11px] text-muted-foreground">Average Precision (AP) no conjunto de teste</p>
+        </div>
+      )}
+
+      {/* ─── MAIN CONTENT AREA ───────────────────────────────────── */}
+      <main className="flex-1 min-w-0 p-3.5 sm:p-6 lg:p-8 flex flex-col gap-6 max-w-7xl mx-auto w-full">
+        {/* Header Banner */}
+        <div className="liquid-glass rounded-3xl p-5 sm:p-7 flex flex-col gap-4 border border-white/10 shadow-2xl relative overflow-hidden">
+          {/* Fluid Mesh Glows */}
+          <div className="pointer-events-none absolute -top-24 right-0 w-96 h-96 bg-rose-600/10 rounded-full blur-[120px]" />
+          <div className="pointer-events-none absolute bottom-0 left-0 w-80 h-80 bg-amber-500/10 rounded-full blur-[100px]" />
+
+          <div className="relative z-10 flex flex-col gap-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <ShieldAlert className="h-4 w-4 text-rose-400 shrink-0" />
+                <span className="font-semibold uppercase tracking-widest text-[10px] sm:text-xs">
+                  Anomaly Detection & Deep Learning Anti-Fraude
+                </span>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <a
+                  href="https://github.com/Renanbritto/fraud-detection-anomaly"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3 py-1 rounded-full text-xs font-semibold bg-white/[0.06] hover:bg-white/10 text-slate-200 hover:text-white border border-white/10 flex items-center gap-1.5 transition-colors shadow-sm"
+                >
+                  <GithubIcon className="h-3.5 w-3.5" />
+                  Repositório GitHub
+                </a>
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-300 border border-rose-500/30 flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  488K Transações Analisadas
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-3 flex-wrap">
+                <h2 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-foreground tracking-tight">
+                  Detecção de Fraude & Anomaly Detection
+                </h2>
+                <span className="liquid-glass-pill px-3 py-1 text-xs font-bold text-rose-300">
+                  Recall 91.8% • Precision 56.2% • F1 69.7%
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-muted-foreground max-w-4xl leading-relaxed">
+                Sistema preditivo de detecção de transações fraudulentas com ensemble de{" "}
+                <strong>Isolation Forest</strong> (não-supervisionado) e <strong>Autoencoder neural</strong> (PyTorch).
+                Inclui <strong>SMOTE</strong> para tratamento de desbalanceamento extremo (0.49% de fraudes),
+                otimização de threshold por custo assimétrico e simulador financeiro de impacto.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col gap-1.5">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>Recall (Fraudes Capturadas)</span>
-            <Eye className="h-4 w-4 text-amber-400" />
+        {/* ─── KPI CARDS ──────────────────────────────────────────── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+          <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col gap-1.5 shadow-sm">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>Precision-Recall AUC</span>
+              <Target className="h-4 w-4 text-rose-400" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-extrabold text-rose-300 font-mono">0.847</div>
+            <p className="text-[11px] text-muted-foreground">Average Precision (AP) no conjunto de teste</p>
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-amber-300 font-mono">91.8%</div>
-          <p className="text-[11px] text-muted-foreground">No threshold ótimo de 0.65 (custo assimétrico)</p>
-        </div>
 
-        <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col gap-1.5">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>False Positive Rate</span>
-            <ShieldAlert className="h-4 w-4 text-emerald-400" />
+          <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col gap-1.5 shadow-sm">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>Recall (Fraudes Capturadas)</span>
+              <Eye className="h-4 w-4 text-amber-400" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-extrabold text-amber-300 font-mono">91.8%</div>
+            <p className="text-[11px] text-muted-foreground">No threshold ótimo de 0.65 (custo assimétrico)</p>
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-emerald-300 font-mono">0.30%</div>
-          <p className="text-[11px] text-muted-foreground">Apenas 1.720 legítimas bloqueadas por engano/mês</p>
-        </div>
 
-        <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col gap-1.5">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>Perdas Evitadas (Mensal)</span>
-            <DollarSign className="h-4 w-4 text-cyan-400" />
+          <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col gap-1.5 shadow-sm">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>False Positive Rate</span>
+              <ShieldAlert className="h-4 w-4 text-emerald-400" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-extrabold text-emerald-300 font-mono">0.30%</div>
+            <p className="text-[11px] text-muted-foreground">Apenas 1.720 legítimas bloqueadas por engano/mês</p>
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-cyan-300 font-mono">R$ 7.7M</div>
-          <p className="text-[11px] text-muted-foreground">91.8% das fraudes interceptadas em tempo real</p>
+
+          <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col gap-1.5 shadow-sm">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>Perdas Evitadas (Mensal)</span>
+              <DollarSign className="h-4 w-4 text-cyan-400" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-extrabold text-cyan-300 font-mono">R$ 7.7M</div>
+            <p className="text-[11px] text-muted-foreground">91.8% das fraudes interceptadas em tempo real</p>
+          </div>
         </div>
-      </div>
 
       {/* ================================================================ */}
       {/* TAB 1: VISÃO GERAL & FEATURE IMPORTANCE                         */}
@@ -797,27 +1062,31 @@ export default function DashboardPage() {
                     <span className="w-3 h-3 rounded-sm bg-cyan-500/80" /> Autoencoder
                   </span>
                 </div>
-                <ResponsiveContainer width="100%" height={380}>
-                  <BarChart data={featureImportanceData} layout="vertical" margin={{ left: 10, right: 20 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis type="number" tick={{ fill: "#94a3b8", fontSize: 10 }} domain={[0, 25]} unit="%" />
-                    <YAxis type="category" dataKey="name" tick={{ fill: "#94a3b8", fontSize: 10 }} width={170} />
-                    <Tooltip
-                      contentStyle={{
-                        background: "rgba(15,23,42,0.95)",
-                        border: "1px solid rgba(255,255,255,0.1)",
-                        borderRadius: "12px",
-                        fontSize: "11px",
-                      }}
-                      formatter={(value: any, name: any) => [
-                        `${value}%`,
-                        name === "ifImportance" ? "Isolation Forest" : "Autoencoder",
-                      ]}
-                    />
-                    <Bar dataKey="ifImportance" fill="rgba(244,63,94,0.7)" radius={[0, 4, 4, 0]} barSize={10} />
-                    <Bar dataKey="aeWeight" fill="rgba(34,211,238,0.7)" radius={[0, 4, 4, 0]} barSize={10} />
-                  </BarChart>
-                </ResponsiveContainer>
+                <div className="overflow-x-auto no-scrollbar">
+                  <div className="min-w-[420px] h-[380px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={featureImportanceData} layout="vertical" margin={{ left: 10, right: 20 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                        <XAxis type="number" tick={{ fill: "#94a3b8", fontSize: 10 }} domain={[0, 25]} unit="%" />
+                        <YAxis type="category" dataKey="name" tick={{ fill: "#94a3b8", fontSize: 10 }} width={170} />
+                        <Tooltip
+                          contentStyle={{
+                            background: "rgba(15,23,42,0.95)",
+                            border: "1px solid rgba(255,255,255,0.1)",
+                            borderRadius: "12px",
+                            fontSize: "11px",
+                          }}
+                          formatter={(value: any, name: any) => [
+                            `${value}%`,
+                            name === "ifImportance" ? "Isolation Forest" : "Autoencoder",
+                          ]}
+                        />
+                        <Bar dataKey="ifImportance" fill="rgba(244,63,94,0.7)" radius={[0, 4, 4, 0]} barSize={10} />
+                        <Bar dataKey="aeWeight" fill="rgba(34,211,238,0.7)" radius={[0, 4, 4, 0]} barSize={10} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -948,35 +1217,37 @@ export default function DashboardPage() {
               <Layers className="h-4 w-4 text-purple-400" />
               Arquitetura Neural: Autoencoder Undercomplete
             </div>
-            <div className="grid grid-cols-7 gap-2 items-center py-4">
-              {[
-                { label: "Input", neurons: 8, color: "bg-slate-500" },
-                { label: "Enc. 1", neurons: 32, color: "bg-cyan-500" },
-                { label: "Enc. 2", neurons: 16, color: "bg-blue-500" },
-                { label: "Latent", neurons: 4, color: "bg-purple-500" },
-                { label: "Dec. 1", neurons: 16, color: "bg-blue-500" },
-                { label: "Dec. 2", neurons: 32, color: "bg-cyan-500" },
-                { label: "Output", neurons: 8, color: "bg-slate-500" },
-              ].map((layer, idx) => (
-                <div key={idx} className="flex flex-col items-center gap-2">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase">{layer.label}</span>
-                  <div
-                    className={cn("rounded-xl border border-white/10 flex items-center justify-center font-mono font-bold text-white text-sm", layer.color)}
-                    style={{ height: `${Math.max(30, layer.neurons * 3.5)}px`, width: "100%", opacity: 0.7 }}
-                  >
-                    {layer.neurons}
+            <div className="overflow-x-auto no-scrollbar py-2">
+              <div className="grid grid-cols-7 gap-2 items-center py-2 min-w-[540px] md:min-w-0">
+                {[
+                  { label: "Input", neurons: 8, color: "bg-slate-500" },
+                  { label: "Enc. 1", neurons: 32, color: "bg-cyan-500" },
+                  { label: "Enc. 2", neurons: 16, color: "bg-blue-500" },
+                  { label: "Latent", neurons: 4, color: "bg-purple-500" },
+                  { label: "Dec. 1", neurons: 16, color: "bg-blue-500" },
+                  { label: "Dec. 2", neurons: 32, color: "bg-cyan-500" },
+                  { label: "Output", neurons: 8, color: "bg-slate-500" },
+                ].map((layer, idx) => (
+                  <div key={idx} className="flex flex-col items-center gap-2">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase">{layer.label}</span>
+                    <div
+                      className={cn("rounded-xl border border-white/10 flex items-center justify-center font-mono font-bold text-white text-sm", layer.color)}
+                      style={{ height: `${Math.max(30, layer.neurons * 3.5)}px`, width: "100%", opacity: 0.7 }}
+                    >
+                      {layer.neurons}
+                    </div>
+                    <div className="flex flex-col items-center text-[9px] text-muted-foreground">
+                      {idx < 3 && <span>BatchNorm</span>}
+                      {idx < 3 && <span>LeakyReLU</span>}
+                      {idx === 0 && <span>Dropout(0.2)</span>}
+                      {idx === 3 && <span className="text-purple-400 font-bold">Bottleneck</span>}
+                      {idx > 3 && idx < 6 && <span>BatchNorm</span>}
+                      {idx > 3 && idx < 6 && <span>LeakyReLU</span>}
+                      {idx === 6 && <span>MSE Loss</span>}
+                    </div>
                   </div>
-                  <div className="flex flex-col items-center text-[9px] text-muted-foreground">
-                    {idx < 3 && <span>BatchNorm</span>}
-                    {idx < 3 && <span>LeakyReLU</span>}
-                    {idx === 0 && <span>Dropout(0.2)</span>}
-                    {idx === 3 && <span className="text-purple-400 font-bold">Bottleneck</span>}
-                    {idx > 3 && idx < 6 && <span>BatchNorm</span>}
-                    {idx > 3 && idx < 6 && <span>LeakyReLU</span>}
-                    {idx === 6 && <span>MSE Loss</span>}
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
             <div className="flex items-center gap-4 text-[11px] text-muted-foreground border-t border-white/5 pt-3">
               <span>Optimizer: AdamW (lr=1e-3)</span>
@@ -1272,8 +1543,8 @@ export default function DashboardPage() {
 
                 <div className="space-y-3">
                   {/* Baseline */}
-                  <div className="flex items-center gap-3">
-                    <span className="text-[11px] text-muted-foreground w-48">Perda Total (Sem Modelo)</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
+                    <span className="text-[11px] text-muted-foreground sm:w-48 shrink-0">Perda Total (Sem Modelo)</span>
                     <div className="flex-1 h-6 bg-white/[0.03] rounded-full overflow-hidden">
                       <div className="h-full bg-rose-600/60 rounded-full flex items-center justify-end px-2" style={{ width: "100%" }}>
                         <span className="text-[10px] font-mono font-bold text-white">R$ {simulationMetrics.baselineLoss.toFixed(2)}M</span>
@@ -1282,8 +1553,8 @@ export default function DashboardPage() {
                   </div>
 
                   {/* Detected */}
-                  <div className="flex items-center gap-3">
-                    <span className="text-[11px] text-muted-foreground w-48">Fraudes Detectadas ({selectedPRPoint.recall.toFixed(0)}%)</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
+                    <span className="text-[11px] text-muted-foreground sm:w-48 shrink-0">Fraudes Detectadas ({selectedPRPoint.recall.toFixed(0)}%)</span>
                     <div className="flex-1 h-6 bg-white/[0.03] rounded-full overflow-hidden">
                       <div
                         className="h-full bg-emerald-600/60 rounded-full flex items-center justify-end px-2"
@@ -1295,8 +1566,8 @@ export default function DashboardPage() {
                   </div>
 
                   {/* Missed */}
-                  <div className="flex items-center gap-3">
-                    <span className="text-[11px] text-muted-foreground w-48">Fraudes Escaparam ({(100 - selectedPRPoint.recall).toFixed(0)}%)</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
+                    <span className="text-[11px] text-muted-foreground sm:w-48 shrink-0">Fraudes Escaparam ({(100 - selectedPRPoint.recall).toFixed(0)}%)</span>
                     <div className="flex-1 h-6 bg-white/[0.03] rounded-full overflow-hidden">
                       <div
                         className="h-full bg-rose-500/40 rounded-full flex items-center justify-end px-2"
@@ -1308,8 +1579,8 @@ export default function DashboardPage() {
                   </div>
 
                   {/* FP Cost */}
-                  <div className="flex items-center gap-3">
-                    <span className="text-[11px] text-muted-foreground w-48">Custo de Falsos Positivos</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
+                    <span className="text-[11px] text-muted-foreground sm:w-48 shrink-0">Custo de Falsos Positivos</span>
                     <div className="flex-1 h-6 bg-white/[0.03] rounded-full overflow-hidden">
                       <div
                         className="h-full bg-amber-500/40 rounded-full flex items-center justify-end px-2"
@@ -1379,7 +1650,7 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
