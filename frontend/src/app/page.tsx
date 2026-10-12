@@ -798,15 +798,6 @@ export default function DashboardPage() {
 
         <div className="flex items-center gap-2">
           <button
-            type="button"
-            onClick={() => handleOpenCopilot()}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-500/20 to-amber-500/15 border border-rose-500/30 text-rose-200 text-xs font-bold hover:bg-rose-500/30 transition-all cursor-pointer shadow-sm shadow-rose-500/10"
-            aria-label="Abrir RN Intelligence Copilot"
-          >
-            <MessageSquare className="h-3.5 w-3.5 text-rose-400" />
-            <span>IA Copilot</span>
-          </button>
-          <button
             onClick={() => setMobileMenuOpen(true)}
             className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.05] hover:bg-white/10 border border-white/10 text-white transition-colors cursor-pointer"
             aria-label="Abrir menu"
