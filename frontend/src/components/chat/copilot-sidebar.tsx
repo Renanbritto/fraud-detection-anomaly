@@ -4,18 +4,10 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   Send,
   X,
-  Code2,
-  ChevronDown,
-  ChevronUp,
   User,
   Trash2,
-  Clock,
-  Sparkles,
+  MessageSquare,
   ShieldAlert,
-  Terminal,
-  Activity,
-  Layers,
-  CheckCircle2,
 } from "lucide-react";
 import {
   ChatMessage,
@@ -38,7 +30,6 @@ export function CopilotSidebar({ isOpen, onClose, initialPrompt }: CopilotSideba
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [expandedSql, setExpandedSql] = useState<Record<string, boolean>>({});
   const [hasStarted, setHasStarted] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -90,10 +81,6 @@ export function CopilotSidebar({ isOpen, onClose, initialPrompt }: CopilotSideba
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialPrompt, isOpen]);
-
-  const toggleSql = (msgId: string) => {
-    setExpandedSql((prev) => ({ ...prev, [msgId]: !prev[msgId] }));
-  };
 
   const clearChat = () => {
     if (abortControllerRef.current) {
@@ -237,24 +224,12 @@ export function CopilotSidebar({ isOpen, onClose, initialPrompt }: CopilotSideba
                     e.currentTarget.style.display = "none";
                   }}
                 />
-                <Sparkles className="h-5 w-5 text-rose-400 absolute" style={{ zIndex: -1 }} />
+                <MessageSquare className="h-5 w-5 text-rose-400 absolute" style={{ zIndex: -1 }} />
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 border-2 border-[#0b0f1a]" />
-              </span>
             </div>
 
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-sm font-bold text-white tracking-wide">RN Intelligence</h2>
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                  COPILOT
-                </span>
-                <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
-                  ● Online
-                </span>
-              </div>
+              <h2 className="text-sm font-bold text-white tracking-wide">RN Intelligence</h2>
               <p className="text-[11px] text-slate-400 font-medium truncate max-w-[240px] sm:max-w-[300px]">
                 {projectMeta.name}
               </p>
@@ -294,7 +269,7 @@ export function CopilotSidebar({ isOpen, onClose, initialPrompt }: CopilotSideba
 
               <div className="space-y-1.5 max-w-md">
                 <h3 className="text-base font-bold text-white">
-                  Bem-vindo ao RN Intelligence Copilot
+                  Bem-vindo ao RN Intelligence
                 </h3>
                 <p className="text-xs text-slate-400 leading-relaxed">
                   Assistente analítico com RAG e conhecimento profundo sobre a engine de
@@ -328,7 +303,7 @@ export function CopilotSidebar({ isOpen, onClose, initialPrompt }: CopilotSideba
                       onClick={() => handleSend(question)}
                       className="group flex items-start gap-2.5 p-3 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/5 hover:border-rose-500/30 text-left transition-all cursor-pointer shadow-sm hover:shadow-rose-500/5"
                     >
-                      <Sparkles className="h-4 w-4 text-rose-400 group-hover:scale-110 shrink-0 mt-0.5 transition-transform" />
+                      <MessageSquare className="h-4 w-4 text-rose-400 group-hover:scale-110 shrink-0 mt-0.5 transition-transform" />
                       <span className="text-xs text-slate-300 group-hover:text-white font-medium leading-relaxed">
                         {question}
                       </span>
@@ -360,7 +335,7 @@ export function CopilotSidebar({ isOpen, onClose, initialPrompt }: CopilotSideba
                         e.currentTarget.style.display = "none";
                       }}
                     />
-                    <Sparkles className="h-3.5 w-3.5 text-rose-400" />
+                    <MessageSquare className="h-3.5 w-3.5 text-rose-400" />
                   </div>
                 )}
 
@@ -401,54 +376,6 @@ export function CopilotSidebar({ isOpen, onClose, initialPrompt }: CopilotSideba
                     )}
                   </div>
 
-                  {/* SQL Telemetry & Code Accordion */}
-                  {msg.sql && (
-                    <div className="mt-3 pt-2.5 border-t border-white/10 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <button
-                          type="button"
-                          onClick={() => toggleSql(msg.id)}
-                          className="flex items-center gap-1.5 text-[11px] font-mono text-rose-300 hover:text-rose-200 hover:underline cursor-pointer"
-                        >
-                          <Code2 className="w-3.5 h-3.5 text-rose-400" />
-                          <span>
-                            {expandedSql[msg.id]
-                              ? "Ocultar Consulta Analítica"
-                              : "Inspecionar SQL / Regras Analíticas"}
-                          </span>
-                          {expandedSql[msg.id] ? (
-                            <ChevronUp className="w-3 h-3" />
-                          ) : (
-                            <ChevronDown className="w-3 h-3" />
-                          )}
-                        </button>
-
-                        {msg.executionTime && (
-                          <span className="flex items-center gap-1 text-[10px] font-mono text-slate-400">
-                            <Clock className="w-3 h-3 text-emerald-400" />
-                            {msg.executionTime.toFixed(1)} ms
-                          </span>
-                        )}
-                      </div>
-
-                      {expandedSql[msg.id] && (
-                        <div className="space-y-1.5">
-                          <pre className="p-3 rounded-xl bg-[#060911] border border-white/10 text-[11px] font-mono text-emerald-400 overflow-x-auto selection:bg-emerald-500/20">
-                            <code>{msg.sql}</code>
-                          </pre>
-                          {msg.mode && (
-                            <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono px-1">
-                              <span>Modo: {msg.mode}</span>
-                              <span className="text-emerald-400 flex items-center gap-1">
-                                <CheckCircle2 className="w-3 h-3" /> Verificado no Banco
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
                   <div
                     className={cn(
                       "text-[10px] text-right font-mono pt-1",
@@ -472,7 +399,7 @@ export function CopilotSidebar({ isOpen, onClose, initialPrompt }: CopilotSideba
           {isLoading && messages.length > 0 && !messages[messages.length - 1].content && (
             <div className="flex gap-3 text-xs items-center text-slate-400">
               <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-rose-500/20 to-amber-500/10 border border-rose-500/30 flex items-center justify-center shrink-0 p-0.5 animate-pulse">
-                <Sparkles className="h-3.5 w-3.5 text-rose-400" />
+                <MessageSquare className="h-3.5 w-3.5 text-rose-400" />
               </div>
               <div className="flex items-center gap-2 p-3 rounded-2xl bg-[#0f1422] border border-white/10">
                 <div className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />

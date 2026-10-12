@@ -664,21 +664,12 @@ export default function DashboardPage() {
               )}
             >
               <div className={cn("flex items-center min-w-0", sidebarCollapsed ? "justify-center" : "gap-3")}>
-                <div className="relative p-2 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 shrink-0">
-                  <Sparkles className="h-4 w-4 text-rose-300 group-hover:rotate-12 transition-transform" />
-                  <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                  </span>
+                <div className="p-2 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 shrink-0">
+                  <MessageSquare className="h-4 w-4 text-rose-300 group-hover:scale-110 transition-transform" />
                 </div>
                 {!sidebarCollapsed && (
                   <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-bold text-white tracking-wide">RN Intelligence</span>
-                      <span className="px-1.5 py-0.2 rounded text-[8px] font-bold bg-rose-500/30 text-rose-200 border border-rose-500/40">
-                        AI
-                      </span>
-                    </div>
+                    <span className="text-xs font-bold text-white tracking-wide">RN Intelligence</span>
                     <span className="text-[10px] text-rose-300/80 font-medium truncate">
                       Copilot Analítico RAG
                     </span>
@@ -810,7 +801,7 @@ export default function DashboardPage() {
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-500/20 to-amber-500/15 border border-rose-500/30 text-rose-200 text-xs font-bold hover:bg-rose-500/30 transition-all cursor-pointer shadow-sm shadow-rose-500/10"
             aria-label="Abrir RN Intelligence Copilot"
           >
-            <Sparkles className="h-3.5 w-3.5 text-rose-400" />
+            <MessageSquare className="h-3.5 w-3.5 text-rose-400" />
             <span>IA Copilot</span>
           </button>
           <button
@@ -951,7 +942,7 @@ export default function DashboardPage() {
                   onClick={() => handleOpenCopilot()}
                   className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-rose-600 via-rose-700 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white border border-rose-500/40 flex items-center gap-2 transition-all shadow-md shadow-rose-900/30 cursor-pointer hover:scale-102"
                 >
-                  <Sparkles className="h-3.5 w-3.5 animate-pulse text-amber-200" />
+                  <MessageSquare className="h-3.5 w-3.5 text-amber-200" />
                   <span>RN Intelligence Copilot</span>
                   <kbd className="hidden sm:inline px-1.5 py-0.2 rounded text-[9px] font-mono bg-black/40 border border-white/20 text-white/90">
                     Ctrl K
@@ -1745,13 +1736,7 @@ export default function DashboardPage() {
         title="Abrir RN Intelligence Copilot (Ctrl + K)"
         aria-label="Abrir RN Intelligence Copilot"
       >
-        <div className="relative">
-          <Sparkles className="h-4 w-4 text-amber-200 group-hover:rotate-12 transition-transform" />
-          <span className="absolute -top-1 -right-1 flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-          </span>
-        </div>
+        <MessageSquare className="h-4 w-4 text-amber-200 group-hover:scale-110 transition-transform" />
         <span className="tracking-wide">RN Intelligence</span>
         <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-mono bg-black/40 border border-white/20 text-white/90">
           Ctrl K
