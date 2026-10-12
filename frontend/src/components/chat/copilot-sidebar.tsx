@@ -214,13 +214,12 @@ export function CopilotSidebar({ isOpen, onClose, initialPrompt }: CopilotSideba
         <div className="p-4 px-5 border-b border-white/10 flex items-center justify-between bg-[#0b0f1a]/95 backdrop-blur-md relative z-10">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-rose-500/20 to-amber-500/15 border border-rose-500/30 flex items-center justify-center shadow-lg shadow-rose-500/10 overflow-hidden p-1 shrink-0">
+              <div className="h-10 w-10 rounded-2xl bg-[#0c101d] border border-rose-500/30 flex items-center justify-center shadow-lg shadow-rose-500/10 overflow-hidden shrink-0">
                 <img
-                  src="/logo_badge_sm.png"
+                  src="/rn_logo_emblem.jpg"
                   alt="RN Intelligence"
-                  className="w-7 h-7 object-contain"
+                  className="w-full h-full object-cover"
                   onError={(e) => {
-                    // Fallback para ícone SVG elegante caso a imagem não carregue
                     e.currentTarget.style.display = "none";
                   }}
                 />
@@ -326,11 +325,11 @@ export function CopilotSidebar({ isOpen, onClose, initialPrompt }: CopilotSideba
                 )}
               >
                 {!isUser && (
-                  <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-rose-500/20 to-amber-500/10 border border-rose-500/30 flex items-center justify-center shrink-0 mt-0.5 p-0.5 shadow-sm">
+                  <div className="w-7 h-7 rounded-xl bg-[#0c101d] border border-rose-500/30 flex items-center justify-center shrink-0 mt-0.5 shadow-sm overflow-hidden">
                     <img
-                      src="/logo_badge_sm.png"
+                      src="/rn_logo_emblem.jpg"
                       alt="RN"
-                      className="w-5 h-5 rounded object-contain"
+                      className="w-full h-full object-cover"
                       onError={(e) => {
                         e.currentTarget.style.display = "none";
                       }}
