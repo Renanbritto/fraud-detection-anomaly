@@ -262,8 +262,12 @@ export function CopilotSidebar({ isOpen, onClose, initialPrompt }: CopilotSideba
           {/* Empty State / Boas-vindas quando o chat está limpo */}
           {!hasStarted && messages.length === 0 && (
             <div className="my-auto py-6 flex flex-col items-center text-center space-y-5 animate-in fade-in duration-300">
-              <div className="h-16 w-16 rounded-3xl bg-gradient-to-br from-rose-500/20 via-amber-500/10 to-transparent border border-rose-500/30 flex items-center justify-center shadow-xl shadow-rose-500/10">
-                <ShieldAlert className="h-8 w-8 text-rose-400" />
+              <div className="h-16 w-16 rounded-3xl bg-[#0c101d] border border-rose-500/30 flex items-center justify-center shadow-xl shadow-rose-500/10 overflow-hidden shrink-0">
+                <img
+                  src="/rn_logo_emblem.jpg"
+                  alt="RN Intelligence"
+                  className="w-full h-full object-cover"
+                />
               </div>
 
               <div className="space-y-1.5 max-w-md">

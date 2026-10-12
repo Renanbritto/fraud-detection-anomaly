@@ -617,8 +617,12 @@ export default function DashboardPage() {
           {/* Brand Header */}
           <div className={cn("flex items-center pb-4 border-b border-white/10 transition-all", sidebarCollapsed ? "justify-center flex-col gap-3" : "justify-between")}>
             <div className="flex items-center gap-3 min-w-0">
-              <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-rose-500/20 to-amber-500/10 border border-rose-500/30 flex items-center justify-center shadow-lg shadow-rose-500/10 shrink-0">
-                <ShieldAlert className="h-6 w-6 text-rose-400" />
+              <div className="h-11 w-11 rounded-2xl bg-[#0c101d] border border-rose-500/30 flex items-center justify-center shadow-lg shadow-rose-500/10 overflow-hidden shrink-0">
+                <img
+                  src="/rn_logo_emblem.jpg"
+                  alt="Sentinel"
+                  className="w-full h-full object-cover"
+                />
               </div>
               {!sidebarCollapsed && (
                 <div className="flex flex-col min-w-0">
@@ -780,8 +784,12 @@ export default function DashboardPage() {
       {/* ─── MOBILE / TABLET TOP BAR ───────────────────────────── */}
       <div className="lg:hidden sticky top-0 z-40 px-4 py-3 bg-[#090d16]/90 backdrop-blur-xl border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-rose-500/20 to-amber-500/10 border border-rose-500/30 flex items-center justify-center shadow-md shrink-0">
-            <ShieldAlert className="h-4 w-4 text-rose-400" />
+          <div className="h-8 w-8 rounded-xl bg-[#0c101d] border border-rose-500/30 flex items-center justify-center shadow-md overflow-hidden shrink-0">
+            <img
+              src="/rn_logo_emblem.jpg"
+              alt="Sentinel"
+              className="w-full h-full object-cover"
+            />
           </div>
           <div>
             <span className="font-extrabold text-sm tracking-wider text-white">SENTINEL</span>
