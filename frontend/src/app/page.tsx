@@ -937,17 +937,6 @@ export default function DashboardPage() {
                 </span>
               </div>
               <div className="flex items-center gap-2 flex-wrap">
-                <button
-                  type="button"
-                  onClick={() => handleOpenCopilot()}
-                  className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-rose-600 via-rose-700 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white border border-rose-500/40 flex items-center gap-2 transition-all shadow-md shadow-rose-900/30 cursor-pointer hover:scale-102"
-                >
-                  <MessageSquare className="h-3.5 w-3.5 text-amber-200" />
-                  <span>RN Intelligence Copilot</span>
-                  <kbd className="hidden sm:inline px-1.5 py-0.2 rounded text-[9px] font-mono bg-black/40 border border-white/20 text-white/90">
-                    Ctrl K
-                  </kbd>
-                </button>
                 <a
                   href="https://github.com/Renanbritto/fraud-detection-anomaly"
                   target="_blank"
