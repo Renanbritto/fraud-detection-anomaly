@@ -922,56 +922,6 @@ export default function DashboardPage() {
 
       {/* ─── MAIN CONTENT AREA ───────────────────────────────────── */}
       <main className="flex-1 min-w-0 p-3.5 sm:p-6 lg:p-8 flex flex-col gap-6 max-w-7xl mx-auto w-full">
-        {/* Header Banner */}
-        <div className="liquid-glass rounded-3xl p-5 sm:p-7 flex flex-col gap-4 border border-white/10 shadow-2xl relative overflow-hidden">
-          {/* Fluid Mesh Glows */}
-          <div className="pointer-events-none absolute -top-24 right-0 w-96 h-96 bg-rose-600/10 rounded-full blur-[120px]" />
-          <div className="pointer-events-none absolute bottom-0 left-0 w-80 h-80 bg-amber-500/10 rounded-full blur-[100px]" />
-
-          <div className="relative z-10 flex flex-col gap-3">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <ShieldAlert className="h-4 w-4 text-rose-400 shrink-0" />
-                <span className="font-semibold uppercase tracking-widest text-[10px] sm:text-xs">
-                  Anomaly Detection & Deep Learning Anti-Fraude
-                </span>
-              </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <a
-                  href="https://github.com/Renanbritto/fraud-detection-anomaly"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-3 py-1 rounded-full text-xs font-semibold bg-white/[0.06] hover:bg-white/10 text-slate-200 hover:text-white border border-white/10 flex items-center gap-1.5 transition-colors shadow-sm"
-                >
-                  <GithubIcon className="h-3.5 w-3.5" />
-                  Repositório GitHub
-                </a>
-                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-300 border border-rose-500/30 flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  488K Transações Analisadas
-                </span>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-3 flex-wrap">
-                <h2 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-foreground tracking-tight">
-                  Detecção de Fraude & Anomaly Detection
-                </h2>
-                <span className="liquid-glass-pill px-3 py-1 text-xs font-bold text-rose-300">
-                  Recall 91.8% • Precision 56.2% • F1 69.7%
-                </span>
-              </div>
-              <p className="text-xs sm:text-sm text-muted-foreground max-w-4xl leading-relaxed">
-                Sistema preditivo de detecção de transações fraudulentas com ensemble de{" "}
-                <strong>Isolation Forest</strong> (não-supervisionado) e <strong>Autoencoder neural</strong> (PyTorch).
-                Inclui <strong>SMOTE</strong> para tratamento de desbalanceamento extremo (0.49% de fraudes),
-                otimização de threshold por custo assimétrico e simulador financeiro de impacto.
-              </p>
-            </div>
-          </div>
-        </div>
-
         {/* ─── KPI CARDS ──────────────────────────────────────────── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
           <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col gap-1.5 shadow-sm">
