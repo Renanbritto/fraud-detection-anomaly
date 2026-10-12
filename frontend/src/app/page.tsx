@@ -506,7 +506,7 @@ const NAV_ITEMS = [
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<"overview" | "models" | "pr_curve" | "simulator" | "python_code">("overview");
-  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const tabScrollRef = useRef<HTMLDivElement>(null);
 
@@ -671,7 +671,7 @@ export default function DashboardPage() {
                   <div className="flex flex-col min-w-0">
                     <span className="text-xs font-bold text-white tracking-wide">RN Intelligence</span>
                     <span className="text-[10px] text-rose-300/80 font-medium truncate">
-                      Copilot Analítico RAG
+                      Tire suas dúvidas com IA
                     </span>
                   </div>
                 )}
@@ -1672,14 +1672,11 @@ export default function DashboardPage() {
         type="button"
         onClick={() => handleOpenCopilot()}
         className="fixed bottom-5 right-5 z-40 group flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-rose-600 via-rose-700 to-amber-600 text-white font-bold text-xs shadow-2xl shadow-rose-900/40 border border-rose-400/30 hover:scale-105 active:scale-95 transition-all cursor-pointer backdrop-blur-md"
-        title="Abrir RN Intelligence Copilot (Ctrl + K)"
-        aria-label="Abrir RN Intelligence Copilot"
+        title="Abrir RN Intelligence"
+        aria-label="Abrir RN Intelligence"
       >
         <MessageSquare className="h-4 w-4 text-amber-200 group-hover:scale-110 transition-transform" />
         <span className="tracking-wide">RN Intelligence</span>
-        <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-mono bg-black/40 border border-white/20 text-white/90">
-          Ctrl K
-        </kbd>
       </button>
 
       {/* Drawer Lateral do Copilot (Slide-over) */}
