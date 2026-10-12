@@ -622,10 +622,7 @@ export default function DashboardPage() {
               </div>
               {!sidebarCollapsed && (
                 <div className="flex flex-col min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-base tracking-wider text-white">SENTINEL</span>
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">AI</span>
-                  </div>
+                  <span className="font-extrabold text-base tracking-wider text-white">SENTINEL</span>
                   <span className="text-[11px] text-muted-foreground font-medium truncate">Anomaly & Fraud Engine</span>
                 </div>
               )}
@@ -685,7 +682,7 @@ export default function DashboardPage() {
 
             {!sidebarCollapsed && (
               <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 px-2 mb-1">
-                Módulos do Sistema
+                Módulos
               </span>
             )}
             {NAV_ITEMS.map((item) => {
@@ -787,10 +784,7 @@ export default function DashboardPage() {
             <ShieldAlert className="h-4 w-4 text-rose-400" />
           </div>
           <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-sm tracking-wider text-white">SENTINEL</span>
-              <span className="px-1 py-0.2 rounded text-[8px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">AI</span>
-            </div>
+            <span className="font-extrabold text-sm tracking-wider text-white">SENTINEL</span>
           </div>
         </div>
 
