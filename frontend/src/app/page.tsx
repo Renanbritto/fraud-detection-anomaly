@@ -1552,50 +1552,75 @@ export default function DashboardPage() {
                 <div className="space-y-3">
                   {/* Baseline */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
-                    <span className="text-[11px] text-muted-foreground sm:w-48 shrink-0">Perda Total (Sem Modelo)</span>
-                    <div className="flex-1 h-6 bg-white/[0.03] rounded-full overflow-hidden">
-                      <div className="h-full bg-rose-600/60 rounded-full flex items-center justify-end px-2" style={{ width: "100%" }}>
-                        <span className="text-[10px] font-mono font-bold text-white">R$ {simulationMetrics.baselineLoss.toFixed(2)}M</span>
+                    <span className="text-xs text-muted-foreground sm:w-52 shrink-0 font-medium">Perda Total (Sem Modelo)</span>
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="flex-1 h-5 bg-white/[0.04] rounded-full overflow-hidden border border-white/5 relative">
+                        <div
+                          className="h-full bg-gradient-to-r from-rose-600/70 to-rose-500/80 rounded-full transition-all duration-500"
+                          style={{ width: "100%" }}
+                        />
                       </div>
+                      <span className="text-xs font-mono font-bold text-rose-300 w-24 text-right shrink-0">
+                        R$ {simulationMetrics.baselineLoss.toFixed(2)}M
+                      </span>
                     </div>
                   </div>
 
                   {/* Detected */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
-                    <span className="text-[11px] text-muted-foreground sm:w-48 shrink-0">Fraudes Detectadas ({selectedPRPoint.recall.toFixed(0)}%)</span>
-                    <div className="flex-1 h-6 bg-white/[0.03] rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-emerald-600/60 rounded-full flex items-center justify-end px-2"
-                        style={{ width: `${simulationMetrics.baselineLoss > 0 ? (simulationMetrics.lossPreventedValue / simulationMetrics.baselineLoss) * 100 : 0}%` }}
-                      >
-                        <span className="text-[10px] font-mono font-bold text-white">R$ {simulationMetrics.lossPreventedValue.toFixed(2)}M</span>
+                    <span className="text-xs text-muted-foreground sm:w-52 shrink-0 font-medium">
+                      Fraudes Detectadas ({selectedPRPoint.recall.toFixed(0)}%)
+                    </span>
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="flex-1 h-5 bg-white/[0.04] rounded-full overflow-hidden border border-white/5 relative">
+                        <div
+                          className="h-full bg-gradient-to-r from-emerald-600/70 to-emerald-500/80 rounded-full transition-all duration-500"
+                          style={{
+                            width: `${simulationMetrics.baselineLoss > 0 ? Math.min(100, Math.max(0, (simulationMetrics.lossPreventedValue / simulationMetrics.baselineLoss) * 100)) : 0}%`,
+                          }}
+                        />
                       </div>
+                      <span className="text-xs font-mono font-bold text-emerald-400 w-24 text-right shrink-0">
+                        R$ {simulationMetrics.lossPreventedValue.toFixed(2)}M
+                      </span>
                     </div>
                   </div>
 
                   {/* Missed */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
-                    <span className="text-[11px] text-muted-foreground sm:w-48 shrink-0">Fraudes Escaparam ({(100 - selectedPRPoint.recall).toFixed(0)}%)</span>
-                    <div className="flex-1 h-6 bg-white/[0.03] rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-rose-500/40 rounded-full flex items-center justify-end px-2"
-                        style={{ width: `${simulationMetrics.baselineLoss > 0 ? (simulationMetrics.lossMissedValue / simulationMetrics.baselineLoss) * 100 : 0}%` }}
-                      >
-                        <span className="text-[10px] font-mono font-bold text-white">R$ {simulationMetrics.lossMissedValue.toFixed(2)}M</span>
+                    <span className="text-xs text-muted-foreground sm:w-52 shrink-0 font-medium">
+                      Fraudes Escaparam ({(100 - selectedPRPoint.recall).toFixed(0)}%)
+                    </span>
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="flex-1 h-5 bg-white/[0.04] rounded-full overflow-hidden border border-white/5 relative">
+                        <div
+                          className="h-full bg-gradient-to-r from-rose-500/50 to-rose-400/60 rounded-full transition-all duration-500"
+                          style={{
+                            width: `${simulationMetrics.baselineLoss > 0 ? Math.min(100, Math.max(0, (simulationMetrics.lossMissedValue / simulationMetrics.baselineLoss) * 100)) : 0}%`,
+                          }}
+                        />
                       </div>
+                      <span className="text-xs font-mono font-bold text-rose-400 w-24 text-right shrink-0">
+                        R$ {simulationMetrics.lossMissedValue.toFixed(2)}M
+                      </span>
                     </div>
                   </div>
 
                   {/* FP Cost */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
-                    <span className="text-[11px] text-muted-foreground sm:w-48 shrink-0">Custo de Falsos Positivos</span>
-                    <div className="flex-1 h-6 bg-white/[0.03] rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-amber-500/40 rounded-full flex items-center justify-end px-2"
-                        style={{ width: `${Math.max(2, simulationMetrics.baselineLoss > 0 ? (simulationMetrics.fpCostValue / simulationMetrics.baselineLoss) * 100 : 0)}%` }}
-                      >
-                        <span className="text-[10px] font-mono font-bold text-white">R$ {simulationMetrics.fpCostValue.toFixed(3)}M</span>
+                    <span className="text-xs text-muted-foreground sm:w-52 shrink-0 font-medium">Custo de Falsos Positivos</span>
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="flex-1 h-5 bg-white/[0.04] rounded-full overflow-hidden border border-white/5 relative">
+                        <div
+                          className="h-full bg-gradient-to-r from-amber-500/60 to-amber-400/70 rounded-full transition-all duration-500"
+                          style={{
+                            width: `${Math.min(100, Math.max(simulationMetrics.fpCostValue > 0 ? 1.5 : 0, simulationMetrics.baselineLoss > 0 ? (simulationMetrics.fpCostValue / simulationMetrics.baselineLoss) * 100 : 0))}%`,
+                          }}
+                        />
                       </div>
+                      <span className="text-xs font-mono font-bold text-amber-400 w-24 text-right shrink-0">
+                        R$ {simulationMetrics.fpCostValue.toFixed(3)}M
+                      </span>
                     </div>
                   </div>
                 </div>
